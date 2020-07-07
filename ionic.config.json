@@ -1,0 +1,7 @@
+{
+  "name": "offline-linnworks",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
