@@ -1,0 +1,90 @@
+
+type Order @model {
+  id: ID!
+  processed: Boolean
+  customerInfo: CustomerInfo
+  numOrderId: String
+  items:[Item]
+  shippingInfo: ShippingInfo
+  totalsInfo: TotalInfo
+  # version: Int
+  # lastChangedAt: Int
+  # createdAt: Int
+}
+
+type CustomerInfo{
+  emailAddress: String
+  address1: String
+  address2: String
+  address3: String
+  town: String
+  region: String
+  postCode: String
+  country: String
+  fullName: String
+  company: String
+  phoneNumber: String
+  countryId: String
+}
+
+type Item{
+  itemId: String
+  sku: String
+  itemSource: String
+  title: String
+  quantity: Int
+  categoryName: String
+  stockLevelsSpecified: Boolean
+  onOrder: Int
+  inOrderBook: Int
+  level: Int
+  minimumLevel: Int
+  availableStock: Int
+  pricePerUnit: Int
+  unitCost: Int
+  despatchStockUnitCost: Int
+  discount: Int
+  tax: Int
+  taxRate: Int
+  cost: Float
+  costIncTax: Float
+  isService: Boolean
+  salesTax: Int
+  taxCostInclusive: Boolean
+  partShipped: Boolean
+  weight: Int
+  market: Int
+  channelSKU: String
+  channelTitle: String
+  binRack: String
+  stockItemIntId: Int
+}
+
+type ShippingInfo{
+  vendor: String
+  postalServiceId: String
+  postalServiceName: String
+  totalWeight: String
+  itemWeight: String
+  packageCategoryId: String
+  packageCategory: String
+  postageCost: String
+  postageCostExTax: String
+  trackingNumber: String
+  manualAdjust: Boolean
+}
+
+type TotalInfo{
+  subtotal: Float
+  postageCost: Float
+  tax: Int
+  totalCharge: Float
+  paymentMethod: String
+  paymentMethodId: String
+  profitMargin: Int
+  totalDiscount: Int
+  currency: String
+  countryTaxRate: Int
+  conversionRate: Int
+}
+

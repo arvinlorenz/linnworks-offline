@@ -3,7 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  amplify: {
+    aws_project_region: 'ap-southeast-2',
+    aws_appsync_graphqlEndpoint: 'https://np77xstj4rgzjb344fbzym3bce.appsync-api.ap-southeast-2.amazonaws.com/graphql',
+    aws_appsync_region: 'ap-southeast-2',
+    aws_appsync_authenticationType: 'API_KEY',
+    aws_appsync_apiKey: 'da2-3aapfdxu3fcuvodky3m6uzykoe'
+  }
 };
 
 /*

@@ -1,0 +1,15 @@
+{
+    "amplify": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-offline-linnworks-amplify-135204-authRole",
+            "UnauthRoleArn": "arn:aws:iam::425227421092:role/amplify-offline-linnworks-amplify-135204-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::425227421092:role/amplify-offline-linnworks-amplify-135204-authRole",
+            "Region": "ap-southeast-2",
+            "DeploymentBucketName": "amplify-offline-linnworks-amplify-135204-deployment",
+            "UnauthRoleName": "amplify-offline-linnworks-amplify-135204-unauthRole",
+            "StackName": "amplify-offline-linnworks-amplify-135204",
+            "StackId": "arn:aws:cloudformation:ap-southeast-2:425227421092:stack/amplify-offline-linnworks-amplify-135204/fdc45490-c015-11ea-a020-06e276ca85be",
+            "AmplifyAppId": "dsi7lkqxfuo1q"
+        }
+    }
+}
