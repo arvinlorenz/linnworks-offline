@@ -1,6 +1,13 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onOrderCount = /* GraphQL */ `
+  subscription OnOrderCount {
+    onOrderCount {
+      count
+    }
+  }
+`;
 export const onCreateOrder = /* GraphQL */ `
   subscription OnCreateOrder {
     onCreateOrder {

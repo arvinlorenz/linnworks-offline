@@ -1,0 +1,152 @@
+<ion-segment (ionChange)="segmentChanged($event)" scrollable="true" value="0">
+  <ion-segment-button *ngFor="let item of items; let i = index" [value]="i">
+    <ion-label>Item {{i + 1}}</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
+<ion-list *ngIf="items.length > 0">
+
+  <ion-item>
+    <ion-label>SKU</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.sku}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>channelSKU</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.channelSKU}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>channelTitle</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.channelTitle}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>title</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.title}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>itemSource</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.itemSource}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>availableStock</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.availableStock}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>binRack</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.binRack}}</ion-text>
+  </ion-item>
+
+
+
+  <ion-item>
+    <ion-label>cost</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.cost}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>costIncTax</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.costIncTax}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>despatchStockUnitCost</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.despatchStockUnitCost}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>discount</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.discount}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>inOrderBook</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.inOrderBook}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>level</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.level}}</ion-text>
+  </ion-item>
+
+
+
+
+
+  <ion-item>
+    <ion-label>market</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.market}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>minimumLevel</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.minimumLevel}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>onOrder</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.onOrder}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>partShipped</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.partShipped}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>pricePerUnit</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.pricePerUnit}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>quantity</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.quantity}}</ion-text>
+  </ion-item>
+
+
+
+
+  <ion-item>
+    <ion-label>salesTax</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.salesTax}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>stockItemIntId</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.stockItemIntId}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>stockLevelsSpecified</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.stockLevelsSpecified}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>tax</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.tax}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>taxCostInclusive</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.taxCostInclusive}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>taxRate</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.taxRate}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>unitCost</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.unitCost}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>weight</ion-label>
+    <ion-text slot="end" color="tertiary">{{selectedItem?.weight}}</ion-text>
+  </ion-item>
+</ion-list>

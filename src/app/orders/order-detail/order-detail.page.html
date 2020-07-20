@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="orders"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{order?.numOrderId}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <app-totals *ngIf="segmentValue=='total'" [total]="order?.totalsInfo"></app-totals>
+
+  <app-items *ngIf="segmentValue=='items'" [items]="order?.items"></app-items>
+
+  <app-customer *ngIf="segmentValue=='customer'" [orderId]="order?.id" [customerInfo]="order?.customerInfo"></app-customer>
+
+  <app-shipping *ngIf="segmentValue=='shipping'" [shippingInfo]="order?.shippingInfo"></app-shipping>
+
+</ion-content>
+
+<ion-segment (ionChange)="segmentChanged($event)" value="total">
+  <ion-segment-button value="total">
+    <ion-icon name="cash"></ion-icon>
+    <ion-label>Total</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="customer">
+    <ion-icon name="person"></ion-icon>
+    <ion-label>Customer</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="items">
+    <ion-icon name="pricetags"></ion-icon>
+    <ion-label>Items</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="shipping">
+    <ion-icon name="location"></ion-icon>
+    <ion-label>Shipping</ion-label>
+  </ion-segment-button>
+</ion-segment>

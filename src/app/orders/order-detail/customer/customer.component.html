@@ -1,0 +1,88 @@
+<ion-list>
+  <ion-item>
+    <ion-label  position="floating">Fullname:</ion-label>
+    <ion-input 
+      [(ngModel)]="fullname"
+      (ngModelChange)="onChangeData($event)"
+      color="tertiary"
+      >
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label  position="floating">Company:</ion-label>
+    <ion-input 
+      [(ngModel)]="company"
+      (ngModelChange)="onChangeData($event)"
+      color="tertiary"
+      >
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label  position="floating">Address 1:</ion-label>
+    <ion-input 
+      [(ngModel)]="address1"
+      (ngModelChange)="onChangeData($event)"
+      color="tertiary"
+      >
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label  position="floating">Address 2:</ion-label>
+    <ion-input 
+      [(ngModel)]="address2"
+      (ngModelChange)="onChangeData($event)"
+      color="tertiary"
+      >
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label  position="floating">Address 3:</ion-label>
+    <ion-input 
+      [(ngModel)]="address3"
+      (ngModelChange)="onChangeData($event)"
+      color="tertiary"
+      >
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label  position="floating">Region:</ion-label>
+    <ion-input 
+      [(ngModel)]="region"
+      (ngModelChange)="onChangeData($event)"
+      color="tertiary"
+      >
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label  position="floating">Town:</ion-label>
+    <ion-input 
+      [(ngModel)]="town"
+      (ngModelChange)="onChangeData($event)"
+      color="tertiary"
+      >
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label  position="floating">Postcode:</ion-label>
+    <ion-input 
+      [(ngModel)]="postcode"
+      (ngModelChange)="onChangeData($event)"
+      color="tertiary"
+      >
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Country:</ion-label>
+    <ion-text slot="end" color="tertiary">{{customerInfo.country}}</ion-text>
+  </ion-item>
+
+  
+</ion-list>

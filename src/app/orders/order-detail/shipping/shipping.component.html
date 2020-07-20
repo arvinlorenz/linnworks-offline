@@ -1,0 +1,41 @@
+<ion-list>
+  <!-- <ion-list-header>
+    texts
+  </ion-list-header> -->
+
+  <ion-item>
+    <ion-label>Postal Service Name</ion-label>
+    <ion-text slot="end" color="tertiary">{{shippingInfo?.postalServiceName}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Postage Cost</ion-label>
+    <ion-text slot="end" color="tertiary">{{shippingInfo?.postageCost}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Postage Cost Ex Tax</ion-label>
+    <ion-text slot="end" color="tertiary">{{shippingInfo?.postageCostExTax}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Tracking</ion-label>
+    <ion-text slot="end" color="tertiary">{{shippingInfo?.tracking}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Vendor</ion-label>
+    <ion-text slot="end" color="tertiary">{{shippingInfo?.vendor}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Item Weight</ion-label>
+    <ion-text slot="end" color="tertiary">{{shippingInfo?.itemWeight}}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Total Weight</ion-label>
+    <ion-text slot="end" color="tertiary">{{shippingInfo?.totalWeight}}</ion-text>
+  </ion-item>
+
+</ion-list>

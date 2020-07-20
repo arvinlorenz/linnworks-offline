@@ -1,26 +1,46 @@
-<ion-header>
+<ion-header translucent>
   <ion-toolbar>
     <ion-title>Open Orders</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar #searchBar (ionInput)="getItems($event)"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen>
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      >
+    </ion-refresher-content>
   </ion-refresher>
-  <ion-searchbar #searchBar (ionInput)="getItems($event)"></ion-searchbar>
+
 
   <ion-list>
     <ion-item-sliding *ngFor="let order of ordersRep; let i = index" #slidingItem>
-      <ion-item [routerLink]="[order.id]" [color]="(i % 2 === 0) ? '' : 'light'"> 
+      <ion-item [routerLink]="[order.id]" (press)=selectItem(i)  [color]="(i % 2 === 0) ? '' : 'light'"> 
         <ion-label class="ion-text-capitalize">{{order?.numOrderId}} </ion-label>
+        <!-- <ion-checkbox slot="end"></ion-checkbox> -->
+
       </ion-item>
   
       <div > 
-        <ion-item-options side="end">
+
+        <ion-item-options side="start">
+          <ion-item-option color="primary">
+            <ion-icon name="boat" slot="icon-only"></ion-icon>
+          </ion-item-option>
           <ion-item-option color="secondary">
-            <ion-icon name="create" slot="icon-only"></ion-icon>
+            <ion-icon name="print-outline" slot="icon-only"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="tertiary">
+            <ion-icon name="print-outline" slot="icon-only"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+        <ion-item-options side="end">
+          <ion-item-option color="primary" (click)="presentActionSheet()">
+            <ion-icon name="settings" slot="icon-only"></ion-icon>
           </ion-item-option>
           <ion-item-option color="danger" (click)="showDeleteAlert(order.id, slidingItem)">
             <ion-icon name="trash" slot="icon-only"></ion-icon>

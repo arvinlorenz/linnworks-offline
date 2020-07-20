@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import Amplify from '@aws-amplify/core';
 import { DataStore, Predicates } from '@aws-amplify/datastore';
 import { Order } from '../../models';
-
-import { environment } from '../../environments/environment';
 import { from } from 'rxjs';
-import { AlertController, IonItemSliding, LoadingController, ToastController } from '@ionic/angular';
+import { AlertController, IonItemSliding, LoadingController, ToastController, ActionSheetController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
+
+import API, { graphqlOperation } from '@aws-amplify/api';
+import { onOrderCount } from '../../graphql/subscriptions';
+import { DatastoreService } from '../shared/datastore.service';
 
 @Component({
   selector: 'app-orders',
@@ -19,18 +20,30 @@ export class OrdersPage implements OnInit {
   ordersRep;
 
   constructor(
+    private datastoreService: DatastoreService,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
+    private actionCtrl: ActionSheetController,
     private http: HttpClient) {
 
-    Amplify.configure(environment.amplify);
+      datastoreService.amplifyConfig();
 
   }
 
 
-  ngOnInit() {
+  async ngOnInit() {
+
     this.subscription();
+
+    const orderCountSubscription = API.graphql(
+      graphqlOperation(onOrderCount)
+    ).subscribe({
+      next: (o) => {
+        console.log(o.value.data.onOrderCount.count);
+        this.presentToast(o.value.data.onOrderCount.count);
+      }
+  });
 
     from(DataStore.query(Order, o => o.processed('eq', false))).subscribe(o => {
       this.orders = o;
@@ -41,18 +54,68 @@ export class OrdersPage implements OnInit {
   doRefresh(event) {
     this.http.get('https://djed1qysue.execute-api.ap-southeast-2.amazonaws.com/prod/getOpenOrdersFromLinnworks').subscribe((o) => {
       event.target.complete();
-      this.presentToast(o);
     });
   }
 
   async presentToast(o) {
     const toast = await this.toastCtrl.create({
-      message: o.added > 0 ? `${o.added} orders has been added.` : 'No new orders.',
-      duration: 2000
+      message: o > 0 ? `${o} orders has been added.` : 'No new orders.',
+      duration: 2000,
+      position: 'top'
     });
     toast.present();
   }
 
+  async presentActionSheet() {
+    const actionSheet = await this.actionCtrl.create({
+      header: 'Actions',
+      cssClass: 'my-custom-class',
+      buttons: [{
+        text: 'Delete',
+        role: 'destructive',
+        icon: 'trash',
+        handler: () => {
+          console.log('Delete clicked');
+        }
+      }, {
+        text: 'Process order',
+        icon: 'boat',
+        handler: () => {
+          console.log('Process');
+        }
+      }, {
+        text: 'Print invoice',
+        icon: 'print',
+        handler: () => {
+          console.log('Print');
+        }
+      }, {
+        text: 'Print label',
+        icon: 'print',
+        handler: () => {
+          console.log('Print');
+        }
+      }, {
+        text: 'Batch Pilot',
+        icon: 'airplane',
+        handler: () => {
+          console.log('Batch Pilot');
+        }
+      }, {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      }]
+    });
+    await actionSheet.present();
+  }
+
+  selectItem(i) {
+    console.log(i);
+  }
   getItems(event) {
     this.ordersRep = this.orders;
     if (event.target.value.trim() !== '') {
