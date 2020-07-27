@@ -9,13 +9,22 @@ import { OrdersPageRoutingModule } from './orders-routing.module';
 import { OrdersPage } from './orders.page';
 import { HttpClientModule } from '@angular/common/http';
 
+
+import {TableModule} from 'primeng/table';
+import {TreeTableModule} from 'primeng/treetable';
+
+
+
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     HttpClientModule,
-    OrdersPageRoutingModule
+    OrdersPageRoutingModule,
+    TableModule,
+    TreeTableModule
   ],
   declarations: [OrdersPage]
 })

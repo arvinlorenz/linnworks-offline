@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { DataStore, Predicates } from '@aws-amplify/datastore';
 import { Order } from '../../models';
 import { from } from 'rxjs';
-import { AlertController, IonItemSliding, LoadingController, ToastController, ActionSheetController } from '@ionic/angular';
+import { AlertController, IonItemSliding, LoadingController, ToastController, ActionSheetController, Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 
 import API, { graphqlOperation } from '@aws-amplify/api';
 import { onOrderCount } from '../../graphql/subscriptions';
 import { DatastoreService } from '../shared/datastore.service';
+
 
 @Component({
   selector: 'app-orders',
@@ -19,18 +20,27 @@ export class OrdersPage implements OnInit {
   orders;
   ordersRep;
 
+
+  isDesktop = true;
+  maxItemLength;
+
   constructor(
     private datastoreService: DatastoreService,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private actionCtrl: ActionSheetController,
-    private http: HttpClient) {
+    private http: HttpClient,
+    private plt: Platform) {
 
       datastoreService.amplifyConfig();
 
-  }
+      if (plt.is('desktop')) {
+        this.isDesktop = true;
+        console.log(this.isDesktop);
+      }
 
+  }
 
   async ngOnInit() {
 
@@ -45,9 +55,18 @@ export class OrdersPage implements OnInit {
       }
   });
 
+
     from(DataStore.query(Order, o => o.processed('eq', false))).subscribe(o => {
       this.orders = o;
       this.ordersRep = this.orders;
+      const itemLengths = this.orders.map((or => {
+        if (or.items != null) {
+          return or.items.length;
+        }
+        return 0;
+      }));
+      this.maxItemLength = Math.max(...itemLengths);
+
     });
   }
 

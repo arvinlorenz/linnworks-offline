@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Open Orders</ion-title>
   </ion-toolbar>
-  <ion-toolbar>
+  <ion-toolbar *ngIf="!isDesktop">
     <ion-searchbar #searchBar (ionInput)="getItems($event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
@@ -17,7 +17,7 @@
   </ion-refresher>
 
 
-  <ion-list>
+  <ion-list *ngIf="!isDesktop">
     <ion-item-sliding *ngFor="let order of ordersRep; let i = index" #slidingItem>
       <ion-item [routerLink]="[order.id]" (press)=selectItem(i)  [color]="(i % 2 === 0) ? '' : 'light'"> 
         <ion-label class="ion-text-capitalize">{{order?.numOrderId}} </ion-label>
@@ -50,5 +50,153 @@
       </div>
     </ion-item-sliding>
   </ion-list>
+  
+  <div *ngIf="isDesktop">
+    <p-table 
+    [value]="orders" 
+    [paginator]="true" 
+    [rows]="100" 
+    [rowsPerPageOptions]="[50,100,200]" 
+    [autoLayout]="true" 
+    [resizableColumns]="true"
+    [reorderableColumns]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pResizableColumn rowspan="2">Order Number</th>
+                <th pResizableColumn colspan="10">Totals</th>
+                <th pResizableColumn colspan="11">Customer</th>
+                <th pResizableColumn colspan="11">Items</th>
+                <th pResizableColumn colspan="8">Shipping</th>
+            </tr>
+            <tr>
+                <th>Currency</th>
+                <th>Subtotal</th>
+                <th>Total Charge</th>
+                <th>Total Discount</th>
+                <th>Tax</th>
+                <th>Payment Method</th>
+                <th>Country Tax Rate</th>
+                <th>Conversion Rate</th>
+                <th>Postage Cost</th>
+                <th>Profit Margin</th>
+  
 
+
+                <th pResizableColumn>Name</th>
+                <th>Email</th>
+                <th>Company</th>
+                <th>Address1</th>
+                <th>Address2</th>
+                <th>Address3</th>
+                <th>Phone No.</th>
+                <th>Town</th>
+                <th>Region</th>
+                <th>Postcode</th>
+                <th>Country</th> 
+
+                <th>SKU</th>
+                <th>Title</th>
+                <th>Channel SKU</th>
+                <th>Channel Title</th>
+                <th>Category Name</th>
+                <th>Bin Rack</th>
+                <th>Available Stock</th>
+                <th>Cost</th>
+                <th>Cost Inc Tax</th>
+                <th>Qantity</th>
+                <th>Discount</th>  
+          
+                <th>Vendor</th>
+                <th>Tracking Number</th>
+                <th>Item Weight</th>
+                <th>Total Weight</th>
+                <th>Package Category</th>
+                <th>Postage Cost</th>
+                <th>Postage Cost Ex Tax</th>
+                <th>Postal Service Name</th>
+             
+  
+        </ng-template>
+        <ng-template pTemplate="body" let-order let-rowNode>
+            <tr>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1">
+                {{order.numOrderId}}
+              </td>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.currency}}</td>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.subtotal}}</td>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.totalCharge}}</td>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.totalsInfo.totalDiscount}}</td>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.totalsInfo.tax}}</td>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumnzoom>{{order.totalsInfo.paymentMethod}}</td>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.countryTaxRate}}</td>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.conversionRate}}</td>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.postageCost}}</td>
+              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.profitMargin}}</td>
+
+
+            
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.fullName}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.emailAddress}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.company}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.customerInfo.address1}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.customerInfo.address2}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumnzoom>{{order.customerInfo.address3}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.phoneNumber}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.town}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.region}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.postCode}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.country}}</td>
+
+                <td>{{order.items != null ? order.items[0].sku || '-' : ''}}</td>
+                <td>{{order.items != null ? order.items[0].title || '-' : ''}}</td>
+                <td>{{order.items != null ? order.items[0].channelSku || '-' : ''}}</td>
+                <td>{{order.items != null ? order.items[0].channelTitle || '-' : ''}}</td>
+                <td>{{order.items != null ? order.items[0].categoryName || '-' : ''}}</td>
+                <td>{{order.items != null ? order.items[0].binRack || '-' : ''}}</td>
+                <td>{{order.items != null ? order.items[0].availableStock || '-' : ''}}</td>
+                <td>{{order.items != null ? order.items[0].cost || '-' : ''}}</td>
+                <td>{{order.items != null ? order.items[0].costIncTax || '-' : ''}}</td>
+                <td>{{order.items != null ? order.items[0].quantity || '-' : ''}}</td>
+                <td>{{order.items != null ? order.items[0].discount || '-' : ''}}</td>
+
+
+             
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.vendor}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.trackingNumber}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.itemWeight}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.shippingInfo.totalWeight}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.shippingInfo.packageCategory}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumnzoom>{{order.shippingInfo.packageCost}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.packageCostExTax}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.postaServiceName}}</td>
+
+
+            </tr>
+
+            <ng-container *ngIf="order.items != null && order.items.length > 0">
+              <ng-container *ngFor="let item of order.items | slice:1;" >
+                <tr>
+                  <td>{{item.sku || '-'}}</td>
+                  <td>{{item.title || '-'}}</td>
+                  <td>{{item.channelSku || '-'}}</td>
+                  <td>{{item.channelTitle || '-'}}</td>
+                  <td>{{item.categoryName || '-'}}</td>
+                  <td>{{item.binRack || '-'}}</td>
+                  <td>{{item.availableStock || '-'}}</td>
+                  <td>{{item.cost || '-'}}</td>
+                  <td>{{item.costIncTax || '-'}}</td>
+                  <td>{{item.quantity || '-'}}</td>
+                  <td>{{item.discount || '-'}}</td>
+                </tr>
+                
+              </ng-container>
+
+              
+            </ng-container>
+            
+        </ng-template>
+    </p-table>
+
+  </div>
+  
 </ion-content>
