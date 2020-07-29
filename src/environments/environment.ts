@@ -9,7 +9,7 @@ export const environment = {
     aws_appsync_graphqlEndpoint: 'https://np77xstj4rgzjb344fbzym3bce.appsync-api.ap-southeast-2.amazonaws.com/graphql',
     aws_appsync_region: 'ap-southeast-2',
     aws_appsync_authenticationType: 'API_KEY',
-    aws_appsync_apiKey: '	da2-c5ihnyseqvestljw6u2yxm6lbu'
+    aws_appsync_apiKey: 'da2-wvpytews3bbbbgq7rxczlaa76a'
   }
 };
 
