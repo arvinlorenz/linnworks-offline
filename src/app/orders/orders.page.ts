@@ -21,7 +21,7 @@ export class OrdersPage implements OnInit {
   ordersRep;
 
 
-  isDesktop = true;
+  isDesktop = false;
   maxItemLength;
 
   constructor(

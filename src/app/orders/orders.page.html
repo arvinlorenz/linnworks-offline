@@ -21,6 +21,7 @@
     <ion-item-sliding *ngFor="let order of ordersRep; let i = index" #slidingItem>
       <ion-item [routerLink]="[order.id]" (press)=selectItem(i)  [color]="(i % 2 === 0) ? '' : 'light'"> 
         <ion-label class="ion-text-capitalize">{{order?.numOrderId}} </ion-label>
+        <p>{{order.items?.length}}</p>
         <!-- <ion-checkbox slot="end"></ion-checkbox> -->
 
       </ion-item>
@@ -54,15 +55,25 @@
   <div *ngIf="isDesktop">
     <p-table 
     [value]="orders" 
-    [paginator]="true" 
-    [rows]="100" 
+
+    [scrollable]="true"
+    scrollHeight="80vh"
+    [style]="{width:'100%'}"
     [rowsPerPageOptions]="[50,100,200]" 
-    [autoLayout]="true" 
     [resizableColumns]="true"
-    [reorderableColumns]="true">
+    [reorderableColumns]="true"
+    #dt>
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+          <col *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42]" style="width:100px">
+          
+      </colgroup>
+    </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pResizableColumn rowspan="2">Order Number</th>
+                <th pResizableColumn rowspan="2" pSortableColumn="numOrderId">Order Number
+                  <p-sortIcon field="numOrderId" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                </th>
                 <th pResizableColumn colspan="10">Totals</th>
                 <th pResizableColumn colspan="11">Customer</th>
                 <th pResizableColumn colspan="11">Items</th>
@@ -70,7 +81,10 @@
             </tr>
             <tr>
                 <th>Currency</th>
-                <th>Subtotal</th>
+                <th field="totalsInfo.subtotal">Subtotal
+                  <p-sortIcon field="totalsInfo.subtotal" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+
+                </th>
                 <th>Total Charge</th>
                 <th>Total Discount</th>
                 <th>Tax</th>
@@ -82,7 +96,7 @@
   
 
 
-                <th pResizableColumn>Name</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Company</th>
                 <th>Address1</th>
@@ -115,32 +129,119 @@
                 <th>Postage Cost Ex Tax</th>
                 <th>Postal Service Name</th>
              
-  
+              
+                <tr>
+                  <th>
+                      <input pInputText type="text" (input)="dt.filter($event.target.value, 'numOrderId', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.currency', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.subtotal', 'contains')">
+                  </th>
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.totalCharge', 'contains')">
+                  </th>
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.totalDiscount', 'contains')">
+                  </th>
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.tax', 'contains')">
+                  </th>
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.paymentMethod', 'contains')">
+                  </th>
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.countryTaxRate', 'contains')">
+                  </th>
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.conversionRate', 'contains')">
+                  </th>
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.postageCost', 'contains')">
+                  </th>
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.profitMargin', 'contains')">
+                  </th>
+
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.fullName', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.emailAddress', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.company', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.address1', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.address2', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.address3', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.phoneNumber', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.town', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.region', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.postCode', 'contains')">
+                  </th>
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.country', 'contains')">
+                  </th>
+
+
+                  <th>
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'items[0].sku', 'contains')">
+                  </th>
+                </tr>
         </ng-template>
         <ng-template pTemplate="body" let-order let-rowNode>
             <tr>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1">
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">
                 {{order.numOrderId}}
               </td>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.currency}}</td>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.subtotal}}</td>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.totalCharge}}</td>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.totalsInfo.totalDiscount}}</td>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.totalsInfo.tax}}</td>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumnzoom>{{order.totalsInfo.paymentMethod}}</td>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.countryTaxRate}}</td>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.conversionRate}}</td>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.postageCost}}</td>
-              <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.profitMargin}}</td>
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.currency}}</td>
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.subtotal}}</td>
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.totalCharge}}</td>
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.totalDiscount}}</td>
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.tax}}</td>
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.paymentMethod}}</td>
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.countryTaxRate}}</td>
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.conversionRate}}</td>
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.postageCost}}</td>
+              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.profitMargin}}</td>
 
 
             
                 <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.fullName}}</td>
                 <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.emailAddress}}</td>
                 <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.company}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.customerInfo.address1}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.customerInfo.address2}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumnzoom>{{order.customerInfo.address3}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.address1}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.address2}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.address3}}</td>
                 <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.phoneNumber}}</td>
                 <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.town}}</td>
                 <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.region}}</td>
@@ -164,11 +265,11 @@
                 <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.vendor}}</td>
                 <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.trackingNumber}}</td>
                 <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.itemWeight}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.shippingInfo.totalWeight}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumn>{{order.shippingInfo.packageCategory}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1" pEditableColumnzoom>{{order.shippingInfo.packageCost}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.totalWeight}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.packageCategory}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.packageCost}}</td>
                 <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.packageCostExTax}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.postaServiceName}}</td>
+                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.postalServiceName}}</td>
 
 
             </tr>
