@@ -11,7 +11,12 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 import {TableModule} from 'primeng/table';
-import {TreeTableModule} from 'primeng/treetable';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {TreeModule} from 'primeng/tree';
+import {InputTextModule} from 'primeng/inputtext';
+import {DropdownModule} from 'primeng/dropdown';
+
+
 
 
 
@@ -24,7 +29,10 @@ import {TreeTableModule} from 'primeng/treetable';
     HttpClientModule,
     OrdersPageRoutingModule,
     TableModule,
-    TreeTableModule
+    MultiSelectModule,
+    TreeModule,
+    InputTextModule,
+    DropdownModule
   ],
   declarations: [OrdersPage]
 })

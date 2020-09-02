@@ -1,0 +1,205 @@
+<ion-header translucent>
+    <ion-toolbar>
+      <ion-title>Open Orders</ion-title>
+    </ion-toolbar>
+    <ion-toolbar *ngIf="!isDesktop">
+      <ion-searchbar #searchBar (ionInput)="getItems($event)"></ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content fullscreen>
+  
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content
+        pullingIcon="chevron-down-circle-outline"
+        >
+      </ion-refresher-content>
+    </ion-refresher>
+  
+  
+    <ion-list *ngIf="!isDesktop">
+      <ion-item-sliding *ngFor="let order of ordersRep; let i = index" #slidingItem>
+        <ion-item [routerLink]="[order.id]" (press)=selectItem(i)  [color]="(i % 2 === 0) ? '' : 'light'"> 
+          <ion-label class="ion-text-capitalize">{{order?.numOrderId}} </ion-label>
+          <p>{{order.items?.length}}</p>
+          <!-- <ion-checkbox slot="end"></ion-checkbox> -->
+  
+        </ion-item>
+    
+        <div > 
+  
+          <ion-item-options side="start">
+            <ion-item-option color="primary">
+              <ion-icon name="boat" slot="icon-only"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="secondary">
+              <ion-icon name="print-outline" slot="icon-only"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="tertiary">
+              <ion-icon name="print-outline" slot="icon-only"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+          <ion-item-options side="end">
+            <ion-item-option color="primary" (click)="presentActionSheet()">
+              <ion-icon name="settings" slot="icon-only"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="showDeleteAlert(order.id, slidingItem)">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-item-option>
+           
+        </ion-item-options>
+        </div>
+      </ion-item-sliding>
+    </ion-list>
+    
+    <div *ngIf="isDesktop">
+      <p-table
+      [value]="desktopOrders"
+      [columns]="adjustingDsktopHeaderRows"
+      [scrollable]="true"
+      scrollHeight="100vh"
+      sortMode="multiple"
+      [resizableColumns]="true"
+      columnResizeMode="expand" 
+      stateStorage="local" stateKey="state-local"
+      #dt
+      >
+      <ng-template pTemplate="caption">
+        <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()" class="p-mr-2" pTooltip="CSV" tooltipPosition="bottom">CSV</button>
+        <p-tree 
+        [value]="treeColumns"
+        [(selection)]="selectedColumns"
+        (onNodeSelect)="nodeSelect($event)"
+        (onNodeUnselect)="nodeUnselect($event)"
+        selectionMode="checkbox"></p-tree>
+  
+      </ng-template>
+     
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+            <col *ngFor="let i of dataCols" style="width:100px">     
+        </colgroup>
+      </ng-template>
+      
+        <ng-template  pTemplate="header"  let-columns>
+               
+                <tr *ngFor="let row of columns">
+                    
+                    <ng-container *ngFor="let col of row.cols">
+                      <th *ngIf="col.header == null && col.field =='numOrderId'" pResizableColumn [attr.colspan]="col.colspan" [attr.rowspan]="col.rowspan" [pSortableColumn]="col.field">
+                        {{col.name}}
+                        <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                      </th>  
+                      <th *ngIf="col.header == null && col.field !='numOrderId'" pResizableColumn [attr.colspan]="col.colspan" [attr.rowspan]="col.rowspan">
+                        {{col.name}}
+                      </th>  
+  
+                      <th *ngIf="col.header != null" pResizableColumn [attr.colspan]="col.colspan" [attr.rowspan]="col.rowspan"[pSortableColumn]="col.header+'.'+col.field">
+                        {{col.name}}
+                        <p-sortIcon [field]="col.header+'.'+col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                      </th>  
+                    </ng-container>
+                    
+                </tr>
+                <tr>
+                  <th>
+                    <input
+                    pInputText 
+                    id="numOrderId"
+                    type="text"
+                    (input)="dt.filter($event.target.value, 'numOrderId', 'contains')"
+                    style="width: 100%;"
+                    [value]="dt.filters['numOrderId']?.value">
+                  </th>
+  
+                  <th *ngFor="let inp of dataCols | slice:1;">
+                    <input 
+                    pInputText 
+                    [id]="inp.field"
+                    type="text" 
+                    (input)="dt.filter($event.target.value, inp.header+'.'+inp.field, 'contains')"
+                    style="width: 100%;"
+                    [value]="dt.filters[inp.header+'.'+inp.field]?.value">
+                  </th>
+                  
+                </tr>
+  
+        </ng-template>
+        <ng-template pTemplate="body" let-order>
+            <tr>
+                <td [attr.rowspan]="order.items != null ? order.items.sku.split('|||').length : 1">
+                  {{order.numOrderId}}
+                </td>
+                <ng-container *ngFor="let col of dataCols | slice:1; let i = index">
+                    <ng-container *ngIf="col.header == 'items'">
+                      <td>
+                        {{order.items != null ? order.items[col.field].split('|||')[0] : ''}}
+                      </td>
+                    </ng-container>
+  
+                    <ng-container *ngIf="col.header == 'customerInfo'">
+                      <td 
+                        *ngIf="col.field != 'fullName' 
+                        && col.field != 'emailAddress' 
+                        && col.field != 'phoneNumber'"
+                        pEditableColumn 
+                        [attr.rowspan]="order.items != null ? order.items.sku.split('|||').length : 1">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input 
+                                pInputText 
+                                type="text" 
+                                [disabled]="disableInputEdit"
+                                [value]="order[col.header][col.field]" 
+                                (keydown.enter)="updateCustomerAddress(order.id, col.header, col.field, $event, order[col.header][col.field])"
+                                (focusout)="updateCustomerAddress(order.id, col.header, col.field, $event, order[col.header][col.field])"
+                                >
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{order[col.header] != null ? order[col.header][col.field] : ''}}
+                            </ng-template>
+                        </p-cellEditor>
+                      </td>
+  
+                     
+  
+                      <td 
+                      *ngIf="col.field === 'fullName' 
+                      || col.field === 'emailAddress' 
+                      || col.field === 'phoneNumber'" 
+                      [attr.rowspan]="order.items != null ? order.items.sku.split('|||').length : 1">
+                        {{order[col.header] != null ? order[col.header][col.field] : ''}}
+                      </td>
+                    </ng-container>
+    
+                    <ng-container *ngIf="col.header != 'items' && col.header != 'customerInfo'">
+                      <td [attr.rowspan]="order.items != null ? order.items.sku.split('|||').length : 1">
+                        {{order[col.header] != null ? order[col.header][col.field] : ''}}
+                      </td>
+                    </ng-container>
+    
+                </ng-container>
+                
+            </tr>
+            <ng-container *ngIf="order.items != null && order.items.sku.split('|||').length > 1">
+              <ng-container *ngFor="let v of order.items.sku.split('|||') | slice:1; let i = index">
+                <tr>     
+                  <ng-container  *ngFor="let col of dataCols">
+                    <ng-container *ngIf="col.header == 'items'">     
+                          
+                        <td>{{ order.items[col.field].split('|||')[i+1] }}</td>
+  
+                    </ng-container>
+                  </ng-container>
+               </tr>
+              </ng-container>        
+            </ng-container>
+            
+        </ng-template>
+  
+    </p-table>
+    
+    </div>
+    
+  </ion-content>
+  

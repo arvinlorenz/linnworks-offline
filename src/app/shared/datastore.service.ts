@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Order } from '../../models';
 import { from } from 'rxjs';
 import { DataStore } from '@aws-amplify/datastore';
+import { MaxLengthValidator } from '@angular/forms';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,17 +20,15 @@ export class DatastoreService {
     return from(DataStore.query(Order as any, id));
   }
 
-  updateOrder(id: string, newCustomerInfo) {
+  updateOrder(id, header, field, value) {
     this.getOrder(id).subscribe(item => {
       DataStore.save(
         Order.copyOf(item as any, updated => {
-          updated = {
-            ...item,
-            customerInfo: newCustomerInfo
-          };
-          console.log(updated);
+          updated[header][field] = value;
         })
-      );
+      ).then(a => {
+        console.log(a);
+      });
     });
   }
 }

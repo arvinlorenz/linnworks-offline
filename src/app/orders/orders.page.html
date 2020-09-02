@@ -53,251 +53,152 @@
   </ion-list>
   
   <div *ngIf="isDesktop">
-    <p-table 
-    [value]="orders" 
-
+    <p-table
+    [value]="desktopOrders"
+    [columns]="adjustingDsktopHeaderRows"
     [scrollable]="true"
-    scrollHeight="80vh"
-    [style]="{width:'100%'}"
-    [rowsPerPageOptions]="[50,100,200]" 
+    scrollHeight="100vh"
+    sortMode="multiple"
     [resizableColumns]="true"
-    [reorderableColumns]="true"
-    #dt>
-    <ng-template pTemplate="colgroup" let-columns>
+    columnResizeMode="expand" 
+    stateStorage="local" stateKey="state-local"
+    exportFilename="orders"
+    #dt
+    >
+    <ng-template pTemplate="caption">
+      <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()" class="p-mr-2" pTooltip="CSV" tooltipPosition="bottom">CSV</button>
+      <button (click)="clicked()">hey</button>
+      <p-tree 
+      [value]="treeColumns"
+      [(selection)]="selectedColumns"
+      (onNodeSelect)="nodeSelect($event)"
+      (onNodeUnselect)="nodeUnselect($event)"
+      selectionMode="checkbox"></p-tree>
+
+    </ng-template>
+   
+    <ng-template pTemplate="colgroup">
       <colgroup>
-          <col *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42]" style="width:100px">
-          
+          <col *ngFor="let i of dataCols" style="width:auto">     
       </colgroup>
     </ng-template>
-        <ng-template pTemplate="header">
-            <tr>
-                <th pResizableColumn rowspan="2" pSortableColumn="numOrderId">Order Number
-                  <p-sortIcon field="numOrderId" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-                </th>
-                <th pResizableColumn colspan="10">Totals</th>
-                <th pResizableColumn colspan="11">Customer</th>
-                <th pResizableColumn colspan="11">Items</th>
-                <th pResizableColumn colspan="8">Shipping</th>
-            </tr>
-            <tr>
-                <th>Currency</th>
-                <th field="totalsInfo.subtotal">Subtotal
-                  <p-sortIcon field="totalsInfo.subtotal" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-
-                </th>
-                <th>Total Charge</th>
-                <th>Total Discount</th>
-                <th>Tax</th>
-                <th>Payment Method</th>
-                <th>Country Tax Rate</th>
-                <th>Conversion Rate</th>
-                <th>Postage Cost</th>
-                <th>Profit Margin</th>
-  
-
-
-                <th>Name</th>
-                <th>Email</th>
-                <th>Company</th>
-                <th>Address1</th>
-                <th>Address2</th>
-                <th>Address3</th>
-                <th>Phone No.</th>
-                <th>Town</th>
-                <th>Region</th>
-                <th>Postcode</th>
-                <th>Country</th> 
-
-                <th>SKU</th>
-                <th>Title</th>
-                <th>Channel SKU</th>
-                <th>Channel Title</th>
-                <th>Category Name</th>
-                <th>Bin Rack</th>
-                <th>Available Stock</th>
-                <th>Cost</th>
-                <th>Cost Inc Tax</th>
-                <th>Qantity</th>
-                <th>Discount</th>  
-          
-                <th>Vendor</th>
-                <th>Tracking Number</th>
-                <th>Item Weight</th>
-                <th>Total Weight</th>
-                <th>Package Category</th>
-                <th>Postage Cost</th>
-                <th>Postage Cost Ex Tax</th>
-                <th>Postal Service Name</th>
+    
+      <ng-template  pTemplate="header"  let-columns>
              
-              
-                <tr>
-                  <th>
-                      <input pInputText type="text" (input)="dt.filter($event.target.value, 'numOrderId', 'contains')">
-                  </th>
+              <tr>
+                  <ng-container *ngFor="let row of columns">
+                    <ng-container *ngFor="let col of row.cols">
 
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.currency', 'contains')">
-                  </th>
+                      <th *ngIf="col.header == null && col.field =='numOrderId'" pResizableColumn [attr.colspan]="col.colspan" [pSortableColumn]="col.field">
+                        {{col.name}}
+                        <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                      </th>
+                      <th *ngIf="col.header != null" pResizableColumn [attr.colspan]="col.colspan" [attr.rowspan]="col.rowspan"[pSortableColumn]="col.header+'.'+col.field">
+                        {{col.name}}
+                        <p-sortIcon [field]="col.header+'.'+col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                      </th>  
+                    </ng-container>
+                  </ng-container>
+                  
+                  
+              </tr>
+              <tr>
+                <th>
+                  <input
+                  pInputText 
+                  id="numOrderId"
+                  type="text"
+                  (input)="dt.filter($event.target.value, 'numOrderId', 'contains')"
+                  style="width: 100%;"
+                  [value]="dt.filters['numOrderId']?.value">
+                </th>
 
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.subtotal', 'contains')">
-                  </th>
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.totalCharge', 'contains')">
-                  </th>
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.totalDiscount', 'contains')">
-                  </th>
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.tax', 'contains')">
-                  </th>
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.paymentMethod', 'contains')">
-                  </th>
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.countryTaxRate', 'contains')">
-                  </th>
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.conversionRate', 'contains')">
-                  </th>
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.postageCost', 'contains')">
-                  </th>
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'totalsInfo.profitMargin', 'contains')">
-                  </th>
+                <th *ngFor="let inp of dataCols | slice:1;">
+                  <input 
+                  pInputText 
+                  [id]="inp.field"
+                  type="text" 
+                  (input)="dt.filter($event.target.value, inp.header+'.'+inp.field, 'contains')"
+                  style="width: 100%;"
+                  [value]="dt.filters[inp.header+'.'+inp.field]?.value">
+                </th>
+                
+              </tr>
 
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.fullName', 'contains')">
-                  </th>
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.emailAddress', 'contains')">
-                  </th>
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.company', 'contains')">
-                  </th>
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.address1', 'contains')">
-                  </th>
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.address2', 'contains')">
-                  </th>
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.address3', 'contains')">
-                  </th>
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.phoneNumber', 'contains')">
-                  </th>
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.town', 'contains')">
-                  </th>
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.region', 'contains')">
-                  </th>
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.postCode', 'contains')">
-                  </th>
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'customerInfo.country', 'contains')">
-                  </th>
-
-
-                  <th>
-                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'items[0].sku', 'contains')">
-                  </th>
-                </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-order let-rowNode>
-            <tr>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">
+      </ng-template>
+      <ng-template pTemplate="body" let-order>
+          <tr>
+              <td [attr.rowspan]="order.items != null ? order.items.sku.split('|||').length : 1">
                 {{order.numOrderId}}
               </td>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.currency}}</td>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.subtotal}}</td>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.totalCharge}}</td>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.totalDiscount}}</td>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.tax}}</td>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.paymentMethod}}</td>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.countryTaxRate}}</td>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.conversionRate}}</td>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.postageCost}}</td>
-              <td class="ui-resizable-column" [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.totalsInfo.profitMargin}}</td>
+              <ng-container *ngFor="let col of dataCols | slice:1; let i = index">
+                  <ng-container *ngIf="col.header == 'items'">
+                    <td>
+                      {{order.items != null ? order.items[col.field].split('|||')[0] : ''}}
+                    </td>
+                  </ng-container>
 
+                  <ng-container *ngIf="col.header == 'customerInfo'">
+                    <td 
+                      *ngIf="col.field != 'fullName' 
+                      && col.field != 'emailAddress' 
+                      && col.field != 'phoneNumber'"
+                      pEditableColumn 
+                      [attr.rowspan]="order.items != null ? order.items.sku.split('|||').length : 1">
+                      <p-cellEditor>
+                          <ng-template pTemplate="input">
+                              <input 
+                              pInputText 
+                              type="text" 
+                              [value]="order[col.header][col.field]" 
+                              (keydown.enter)="updateCustomerAddress(order.id, col.header, col.field, $event, order[col.header][col.field])"
+                              (focusout)="updateCustomerAddress(order.id, col.header, col.field, $event, order[col.header][col.field])"
+                              >
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{order[col.header] != null ? order[col.header][col.field] : ''}}
+                          </ng-template>
+                      </p-cellEditor>
+                    </td>
 
-            
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.fullName}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.emailAddress}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.company}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.address1}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.address2}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.address3}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.phoneNumber}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.town}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.region}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.postCode}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.customerInfo.country}}</td>
+                   
 
-                <td>{{order.items != null ? order.items[0].sku || '-' : ''}}</td>
-                <td>{{order.items != null ? order.items[0].title || '-' : ''}}</td>
-                <td>{{order.items != null ? order.items[0].channelSku || '-' : ''}}</td>
-                <td>{{order.items != null ? order.items[0].channelTitle || '-' : ''}}</td>
-                <td>{{order.items != null ? order.items[0].categoryName || '-' : ''}}</td>
-                <td>{{order.items != null ? order.items[0].binRack || '-' : ''}}</td>
-                <td>{{order.items != null ? order.items[0].availableStock || '-' : ''}}</td>
-                <td>{{order.items != null ? order.items[0].cost || '-' : ''}}</td>
-                <td>{{order.items != null ? order.items[0].costIncTax || '-' : ''}}</td>
-                <td>{{order.items != null ? order.items[0].quantity || '-' : ''}}</td>
-                <td>{{order.items != null ? order.items[0].discount || '-' : ''}}</td>
-
-
-             
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.vendor}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.trackingNumber}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.itemWeight}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.totalWeight}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.packageCategory}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.packageCost}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.packageCostExTax}}</td>
-                <td [attr.rowspan]="order.items != null ? order.items.length : 1">{{order.shippingInfo.postalServiceName}}</td>
-
-
-            </tr>
-
-            <ng-container *ngIf="order.items != null && order.items.length > 0">
-              <ng-container *ngFor="let item of order.items | slice:1;" >
-                <tr>
-                  <td>{{item.sku || '-'}}</td>
-                  <td>{{item.title || '-'}}</td>
-                  <td>{{item.channelSku || '-'}}</td>
-                  <td>{{item.channelTitle || '-'}}</td>
-                  <td>{{item.categoryName || '-'}}</td>
-                  <td>{{item.binRack || '-'}}</td>
-                  <td>{{item.availableStock || '-'}}</td>
-                  <td>{{item.cost || '-'}}</td>
-                  <td>{{item.costIncTax || '-'}}</td>
-                  <td>{{item.quantity || '-'}}</td>
-                  <td>{{item.discount || '-'}}</td>
-                </tr>
-                
+                    <td 
+                    *ngIf="col.field === 'fullName' 
+                    || col.field === 'emailAddress' 
+                    || col.field === 'phoneNumber'" 
+                    [attr.rowspan]="order.items != null ? order.items.sku.split('|||').length : 1">
+                      {{order[col.header] != null ? order[col.header][col.field] : ''}}
+                    </td>
+                  </ng-container>
+  
+                  <ng-container *ngIf="col.header != 'items' && col.header != 'customerInfo'">
+                    <td [attr.rowspan]="order.items != null ? order.items.sku.split('|||').length : 1">
+                      {{order[col.header] != null ? order[col.header][col.field] : ''}}
+                    </td>
+                  </ng-container>
+  
               </ng-container>
-
               
-            </ng-container>
-            
-        </ng-template>
-    </p-table>
+          </tr>
+          <ng-container *ngIf="order.items != null && order.items.sku.split('|||').length > 1">
+            <ng-container *ngFor="let v of order.items.sku.split('|||') | slice:1; let i = index">
+              <tr>     
+                <ng-container  *ngFor="let col of dataCols">
+                  <ng-container *ngIf="col.header == 'items'">     
+                        
+                      <td>{{ order.items[col.field].split('|||')[i+1] }}</td>
 
+                  </ng-container>
+                </ng-container>
+             </tr>
+            </ng-container>        
+          </ng-container>
+          
+      </ng-template>
+
+  </p-table>
+  
   </div>
   
 </ion-content>
